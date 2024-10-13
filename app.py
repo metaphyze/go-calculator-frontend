@@ -4,12 +4,15 @@ from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 import os
+import requests
+from bson import ObjectId
 
 
 app = Flask(__name__)
 
 # Read configuration from environment variables
 calculation_server_url = os.environ.get('CALCULATION_URL', 'http://localhost:9999')
+user_db_host_and_port = os.environ.get('USER_DB_HOST_AND_PORT','localhost:27017')
 port = int(os.environ.get('PORT', 5000))
 
 app.secret_key = 'your_secret_key'  # Necessary for session management
@@ -20,8 +23,9 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 # Initialize MongoDB connection
-client = MongoClient('mongodb://44.203.196.77:27017/')  # Change as needed for your MongoDB instance
-db = client.users_db
+client = MongoClient(f'mongodb://{user_db_host_and_port}/')  # Change as needed for your MongoDB instance
+#db = client['users']
+db = client.users
 users_collection = db.users
 
 
@@ -36,14 +40,20 @@ class User(UserMixin):
 # User loader for Flask-Login
 @login_manager.user_loader
 def load_user(user_id):
-    user_data = users_collection.find_one({"_id": user_id})
-    if user_data:
-        return User(user_id=user_data['_id'], username=user_data['name'], email=user_data['email'])
-    return None
+    try:
+        user_data = users_collection.find_one({"_id": ObjectId(user_id)})
+        if user_data:
+            return User(user_id=user_data['_id'], username=user_data['name'], email=user_data['email'])
+        return None
+    except Exception as e:
+        print(e)
+        return None
 
 
 # Serve the webpage
-@app.route('/')
+@app.route('/', methods=['GET'])
+#@app.route('/index', methods=['GET'])
+@login_required  # Require login to access the index page
 def index():
     return render_template('index.html')
 
@@ -82,6 +92,8 @@ def login():
         if user_data and check_password_hash(user_data['password'], password):
             user = User(user_id=user_data['_id'], username=user_data['name'], email=user_data['email'])
             login_user(user)
+
+            # Redirect to index page after successful login
             return redirect(url_for('index'))
         return "Invalid username or password!"
 
