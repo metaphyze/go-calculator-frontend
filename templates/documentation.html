@@ -14,22 +14,25 @@
 
     <div class="container">
         <h1>Scientific Calculator Functions</h1>
+        <div class="back-link" style="margin-top: 20px; text-align: center;">
+            <p><a href="{{ url_for('index') }}">Back to Problem Submission</a></p>
+        </div>
         <p>The following functions are available in the scientific calculator:</p>
 
         <h2>Functions List</h2>
         <ul>
             <li><code>abs(x)</code>: Returns the absolute value of <code>x</code>.</li>
-            <li><code>acos(x)</code>: Returns the arc cosine of <code>x</code> in radians.</li>
+            <li><code>acos(x)</code>: Returns the arc cosine of <code>x</code> where <code>x</code> is in radians.</li>
             <li><code>acosh(x)</code>: Returns the inverse hyperbolic cosine of <code>x</code>.</li>
-            <li><code>asin(x)</code>: Returns the arc sine of <code>x</code> in radians.</li>
+            <li><code>asin(x)</code>: Returns the arc sine of <code>x</code> where <code>x</code> is in radians.</li>
             <li><code>asinh(x)</code>: Returns the inverse hyperbolic sine of <code>x</code>.</li>
-            <li><code>atan(x)</code>: Returns the arc tangent of <code>x</code> in radians.</li>
-            <li><code>atan2(y, x)</code>: Returns the arc tangent of <code>y/x</code> in radians.</li>
+            <li><code>atan(x)</code>: Returns the arc tangent of <code>x</code> where <code>x</code> is in radians.</li>
+            <li><code>atan2(y, x)</code>: Returns the arc tangent of <code>y/x</code> where <code>x</code> is in radians.</li>
             <li><code>atanh(x)</code>: Returns the inverse hyperbolic tangent of <code>x</code>.</li>
             <li><code>cbrt(x)</code>: Returns the cube root of <code>x</code>.</li>
             <li><code>ceil(x)</code>: Returns the smallest integer value greater than or equal to <code>x</code>.</li>
             <li><code>copysign(x, y)</code>: Returns <code>x</code> with the sign of <code>y</code>.</li>
-            <li><code>cos(x)</code>: Returns the cosine of <code>x</code> in radians.</li>
+            <li><code>cos(x)</code>: Returns the cosine of <code>x</code> where <code>x</code> is in radians.</li>
             <li><code>cosh(x)</code>: Returns the hyperbolic cosine of <code>x</code>.</li>
             <li><code>dim(x, y)</code>: Returns the positive difference between <code>x</code> and <code>y</code>.</li>
             <li><code>erf(x)</code>: Returns the error function of <code>x</code>.</li>
@@ -59,15 +62,19 @@
             <li><code>remainder(x, y)</code>: Returns the remainder of <code>x</code> divided by <code>y</code>, with the same sign as <code>x</code>.</li>
             <li><code>round(x)</code>: Rounds <code>x</code> to the nearest integer.</li>
             <li><code>roundtoeven(x)</code>: Rounds <code>x</code> to the nearest even integer.</li>
-            <li><code>sin(x)</code>: Returns the sine of <code>x</code> in radians.</li>
+            <li><code>sin(x)</code>: Returns the sine of <code>x</code> where <code>x</code> is in radians.</li>
             <li><code>sinh(x)</code>: Returns the hyperbolic sine of <code>x</code>.</li>
             <li><code>sqrt(x)</code>: Returns the square root of <code>x</code>.</li>
-            <li><code>tan(x)</code>: Returns the tangent of <code>x</code> in radians.</li>
+            <li><code>tan(x)</code>: Returns the tangent of <code>x</code> where <code>x</code> is in radians.</li>
             <li><code>tanh(x)</code>: Returns the hyperbolic tangent of <code>x</code>.</li>
             <li><code>trunc(x)</code>: Truncates <code>x</code> to its integer part.</li>
             <li><code>y0(x)</code>: Returns the Bessel function of the second kind of order zero.</li>
             <li><code>y1(x)</code>: Returns the Bessel function of the second kind of order one.</li>
         </ul>
+
+        <div class="back-link" style="margin-top: 20px; text-align: center;">
+            <p><a href="{{ url_for('index') }}">Back to Problem Submission</a></p>
+        </div>
     </div>
 </body>
 </html>
