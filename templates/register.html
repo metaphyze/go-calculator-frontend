@@ -11,9 +11,19 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* Changed to column for banner and form alignment */
             align-items: center;
             height: 100vh;
+        }
+
+        .banner {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            width: 100%; /* Full width */
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px; /* Space between banner and form */
         }
 
         .register-container {
@@ -72,6 +82,10 @@
     </style>
 </head>
 <body>
+    <div class="banner">
+        Scientific Calculator
+    </div>
+
     <div class="register-container">
         <h1>Register</h1>
         <form method="POST">

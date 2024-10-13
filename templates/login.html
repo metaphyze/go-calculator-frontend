@@ -11,9 +11,18 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center; /* Center elements horizontally */
+        }
+
+        .banner {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%; /* Full-width banner */
+            box-sizing: border-box; /* Ensures padding is inside width */
         }
 
         .login-container {
@@ -24,6 +33,7 @@
             max-width: 400px;
             width: 100%;
             text-align: center;
+            margin-top: 20px; /* Space between banner and login form */
         }
 
         h1 {
@@ -72,6 +82,10 @@
     </style>
 </head>
 <body>
+    <div class="banner">
+        Scientific Calculator
+    </div>
+
     <div class="login-container">
         <h1>Login</h1>
         <form method="POST">
