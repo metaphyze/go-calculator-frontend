@@ -95,7 +95,7 @@ def login():
 
             # Redirect to index page after successful login
             return redirect(url_for('index'))
-        return "Invalid username or password!"
+        return render_template('invalid_login.html')
 
     return render_template('login.html')
 
