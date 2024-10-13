@@ -5,55 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Problem</title>
     <style>
-        .header {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
             display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            background-color: #f0f0f0;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .main-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .problem-container, .response-container {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
             font-size: 16px;
         }
 
-        .header .user-info {
-            float: left;
+        textarea[readonly] {
+            background-color: #f9f9f9;
         }
 
-        .header .logout {
-            float: right;
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
-        .problem-container {
-            text-align: center;
-            margin-top: 20px;
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .top-bar .user-name {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .top-bar a {
+            font-size: 18px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .top-bar a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    {% if current_user.is_authenticated %}
-        <!-- Header section with user info and logout link -->
-        <div class="header">
-            <div class="user-info">
-                Logged in as: {{ current_user.username }}
-            </div>
-            <div class="logout">
-                <a href="{{ url_for('logout') }}">Logout</a>
-            </div>
+    <div class="main-container">
+        <div class="top-bar">
+            <div class="user-name">Logged in as: {{ current_user.username }}</div>
+            <a href="{{ url_for('logout') }}">Logout</a>
         </div>
 
-        <!-- Problem submission form -->
-        <div class="problem-container">
+        {% if current_user.is_authenticated %}
             <h1>Submit Your Problem</h1>
-            <form id="problemForm">
-                <textarea id="problem" rows="4" cols="50" placeholder="Enter your problem here"></textarea>
-                <br /><br />
-                <button type="submit">Submit</button>
-            </form>
-            <br />
-            <div id="response"></div>
-        </div>
-    {% else %}
-        <h1>Welcome</h1>
-        <p><a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('register') }}">Register</a></p>
-    {% endif %}
+            <div class="problem-container">
+                <form id="problemForm">
+                    <textarea id="problem" rows="4" placeholder="Enter your problem here"></textarea>
+                    <br /><br />
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+
+            <div class="response-container">
+                <h2>Server Response:</h2>
+                <textarea id="response" rows="4" readonly></textarea>
+            </div>
+        {% else %}
+            <h1>Welcome</h1>
+            <p><a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('register') }}">Register</a></p>
+        {% endif %}
+    </div>
 
     <script>
         document.getElementById('problemForm').addEventListener('submit', async function(event) {
@@ -72,8 +129,8 @@
 
             const data = await response.json();
 
-            // Display the response from the server
-            document.getElementById('response').innerHTML = `<h2>Server Response:</h2><p>${data.message}</p>`;
+            // Display the response from the server in the textarea
+            document.getElementById('response').value = data.message;
         });
     </script>
 </body>
