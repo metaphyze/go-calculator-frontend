@@ -69,7 +69,7 @@
 <body>
     <div class="container">
         <h1>Username Already Exists</h1>
-        <p>The username you tried to register is already in use.</p>
+        <p>The username <strong>{{ username }}</strong> is already taken.</p>
         <div class="button-container">
             <a href="{{ url_for('login') }}">Login</a>
             <a href="{{ url_for('register') }}">Register</a>
