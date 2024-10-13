@@ -71,7 +71,7 @@ def register():
 
         # Check if user already exists
         if users_collection.find_one({"name": username}):
-            return "Username already exists!"
+            return render_template('user_already_exists.html')
 
         # Insert new user into the database
         users_collection.insert_one({"name": username, "password": hashed_password, "email": email})
