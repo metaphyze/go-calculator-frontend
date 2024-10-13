@@ -11,9 +11,19 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* Changed to column for banner and main content alignment */
             align-items: center;
             height: 100vh;
+        }
+
+        .banner {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            width: 100%; /* Full width */
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px; /* Space between banner and container */
         }
 
         .container {
@@ -67,6 +77,10 @@
     </style>
 </head>
 <body>
+    <div class="banner">
+        Scientific Calculator
+    </div>
+
     <div class="container">
         <h1>Username Already Exists</h1>
         <p>The username <strong>{{ username }}</strong> is already taken.</p>
