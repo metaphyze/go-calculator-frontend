@@ -1,0 +1,43 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Problem</title>
+</head>
+<body>
+    <h1>Submit Your Problem</h1>
+    <form id="problemForm">
+        <textarea id="problem" rows="4" cols="50" placeholder="Enter your problem here"></textarea>
+        <br /><br />
+        <button type="submit">Submit</button>
+    </form>
+
+    <br />
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('problemForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const problem = document.getElementById('problem').value;
+
+            // Make a POST request to the Flask server
+            const response = await fetch(`/submit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ problem: problem })
+            });
+
+            const data = await response.json();
+
+            // Display the response from the server
+            document.getElementById('response').innerHTML = `<h2>Server Response:</h2><p>${data.message}</p>`;
+        });
+    </script>
+</body>
+</html>
+
