@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator Documentation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_documentation.css') }}">
+</head>
+<body>
+    <div class="banner">
+        Scientific Calculator
+    </div>
+
+    <div class="container">
+        <h1>Scientific Calculator Functions</h1>
+        <p>The following functions are available in the scientific calculator:</p>
+
+        <h2>Functions List</h2>
+        <ul>
+            <li><code>abs(x)</code>: Returns the absolute value of <code>x</code>.</li>
+            <li><code>acos(x)</code>: Returns the arc cosine of <code>x</code> in radians.</li>
+            <li><code>acosh(x)</code>: Returns the inverse hyperbolic cosine of <code>x</code>.</li>
+            <li><code>asin(x)</code>: Returns the arc sine of <code>x</code> in radians.</li>
+            <li><code>asinh(x)</code>: Returns the inverse hyperbolic sine of <code>x</code>.</li>
+            <li><code>atan(x)</code>: Returns the arc tangent of <code>x</code> in radians.</li>
+            <li><code>atan2(y, x)</code>: Returns the arc tangent of <code>y/x</code> in radians.</li>
+            <li><code>atanh(x)</code>: Returns the inverse hyperbolic tangent of <code>x</code>.</li>
+            <li><code>cbrt(x)</code>: Returns the cube root of <code>x</code>.</li>
+            <li><code>ceil(x)</code>: Returns the smallest integer value greater than or equal to <code>x</code>.</li>
+            <li><code>copysign(x, y)</code>: Returns <code>x</code> with the sign of <code>y</code>.</li>
+            <li><code>cos(x)</code>: Returns the cosine of <code>x</code> in radians.</li>
+            <li><code>cosh(x)</code>: Returns the hyperbolic cosine of <code>x</code>.</li>
+            <li><code>dim(x, y)</code>: Returns the positive difference between <code>x</code> and <code>y</code>.</li>
+            <li><code>erf(x)</code>: Returns the error function of <code>x</code>.</li>
+            <li><code>erfc(x)</code>: Returns the complementary error function of <code>x</code>.</li>
+            <li><code>erfcinv(x)</code>: Returns the inverse of the complementary error function.</li>
+            <li><code>erfinv(x)</code>: Returns the inverse of the error function.</li>
+            <li><code>exp(x)</code>: Returns <code>e</code> raised to the power of <code>x</code>.</li>
+            <li><code>exp2(x)</code>: Returns <code>2</code> raised to the power of <code>x</code>.</li>
+            <li><code>expm1(x)</code>: Returns <code>e</code> raised to the power of <code>x</code> minus <code>1</code>.</li>
+            <li><code>fma(x, y, z)</code>: Returns <code>x * y + z</code> accurately.</li>
+            <li><code>floor(x)</code>: Returns the largest integer value less than or equal to <code>x</code>.</li>
+            <li><code>gamma(x)</code>: Returns the gamma function of <code>x</code>.</li>
+            <li><code>hypot(x, y)</code>: Returns the square root of the sum of the squares of <code>x</code> and <code>y</code>.</li>
+            <li><code>j0(x)</code>: Returns the Bessel function of the first kind of order zero.</li>
+            <li><code>j1(x)</code>: Returns the Bessel function of the first kind of order one.</li>
+            <li><code>log(x)</code>: Returns the natural logarithm of <code>x</code>.</li>
+            <li><code>log10(x)</code>: Returns the base-10 logarithm of <code>x</code>.</li>
+            <li><code>log1p(x)</code>: Returns the natural logarithm of <code>1 + x</code>.</li>
+            <li><code>log2(x)</code>: Returns the base-2 logarithm of <code>x</code>.</li>
+            <li><code>logb(x)</code>: Returns the binary logarithm of <code>x</code> (logarithm base 2).</li>
+            <li><code>max(x, y)</code>: Returns the larger of <code>x</code> and <code>y</code>.</li>
+            <li><code>min(x, y)</code>: Returns the smaller of <code>x</code> and <code>y</code>.</li>
+            <li><code>mod(x, y)</code>: Returns the remainder of <code>x</code> divided by <code>y</code>.</li>
+            <li><code>nan()</code>: Returns a "not-a-number" value.</li>
+            <li><code>nextafter(x, y)</code>: Returns the next representable floating-point value after <code>x</code> towards <code>y</code>.</li>
+            <li><code>pow(x, y)</code>: Returns <code>x</code> raised to the power of <code>y</code>.</li>
+            <li><code>remainder(x, y)</code>: Returns the remainder of <code>x</code> divided by <code>y</code>, with the same sign as <code>x</code>.</li>
+            <li><code>round(x)</code>: Rounds <code>x</code> to the nearest integer.</li>
+            <li><code>roundtoeven(x)</code>: Rounds <code>x</code> to the nearest even integer.</li>
+            <li><code>sin(x)</code>: Returns the sine of <code>x</code> in radians.</li>
+            <li><code>sinh(x)</code>: Returns the hyperbolic sine of <code>x</code>.</li>
+            <li><code>sqrt(x)</code>: Returns the square root of <code>x</code>.</li>
+            <li><code>tan(x)</code>: Returns the tangent of <code>x</code> in radians.</li>
+            <li><code>tanh(x)</code>: Returns the hyperbolic tangent of <code>x</code>.</li>
+            <li><code>trunc(x)</code>: Truncates <code>x</code> to its integer part.</li>
+            <li><code>y0(x)</code>: Returns the Bessel function of the second kind of order zero.</li>
+            <li><code>y1(x)</code>: Returns the Bessel function of the second kind of order one.</li>
+        </ul>
+    </div>
+</body>
+</html>

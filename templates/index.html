@@ -32,6 +32,10 @@
                 <h2>Server Response:</h2>
                 <textarea id="response" rows="4" readonly></textarea>
             </div>
+
+            <div class="documentation-link" style="margin-top: 20px; text-align: center;">
+                <p>For a list of available functions, please visit the <a href="{{ url_for('documentation') }}">Documentation</a>.</p>
+            </div>
         {% else %}
             <h1>Welcome</h1>
             <p><a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('register') }}">Register</a></p>

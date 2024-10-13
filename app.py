@@ -52,11 +52,14 @@ def load_user(user_id):
 
 # Serve the webpage
 @app.route('/', methods=['GET'])
-#@app.route('/index', methods=['GET'])
 @login_required  # Require login to access the index page
 def index():
     return render_template('index.html')
 
+@app.route('/documentation', methods=['GET'])
+@login_required  # Require login to access the index page
+def documentation():
+    return render_template('documentation.html')
 
 # Register route
 @app.route('/register', methods=['GET', 'POST'])
