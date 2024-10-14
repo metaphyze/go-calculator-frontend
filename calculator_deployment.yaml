@@ -15,6 +15,7 @@ spec:
       containers:
       - name: calculator-frontend
         image: metaphyze/calculator-frontend:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
         env:
@@ -43,6 +44,7 @@ spec:
       containers:
       - name: calculation-server
         image: metaphyze/go-calculator:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
