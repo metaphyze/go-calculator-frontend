@@ -52,7 +52,7 @@ def load_user(user_id):
             return User(user_id=user_data['_id'], username=user_data['name'], email=user_data['email'])
         return None
     except Exception as e:
-        print(e)
+        app.logger.error(f"Error loading user: {e}")
         return None
 
 
@@ -89,9 +89,9 @@ def send_message_thread(event_type, username, timestamp, ip_address,target_user)
                               ))
 
         connection.close()
-        print(f"Sent RabbitMQ message: {message}")
+        app.logger.info(f"Sent RabbitMQ message: {message}")
     except Exception as e:
-        print(f"Failed to send message to RabbitMQ: {e}")
+        app.logger.error(f"Failed to send message to RabbitMQ: {e}")
 
 # Serve the webpage
 @app.route('/', methods=['GET'])
