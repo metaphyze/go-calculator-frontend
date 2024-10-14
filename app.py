@@ -29,7 +29,6 @@ login_manager.login_view = 'login'
 
 # Initialize MongoDB connection
 client = MongoClient(f'mongodb://{user_db_host_and_port}/')
-#db = client['users']
 db = client.users
 users_collection = db.users
 
@@ -56,12 +55,12 @@ def load_user(user_id):
 
 
 # Function to send messages to RabbitMQ in a separate thread
-def send_message(event_type, username):
+def send_message(event_type, username, ip_address, target_user=''):
     timestamp = datetime.utcnow().isoformat() + 'Z'
-    thread = threading.Thread(target=send_message_thread, args=(event_type, username, timestamp))
+    thread = threading.Thread(target=send_message_thread, args=(event_type, username, timestamp, ip_address,target_user))
     thread.start()
 
-def send_message_thread(event_type, username, timestamp):
+def send_message_thread(event_type, username, timestamp, ip_address,target_user):
     try:
         # Establish connection with RabbitMQ
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
@@ -74,7 +73,9 @@ def send_message_thread(event_type, username, timestamp):
         message = {
             'username': username,
             'event_type': event_type,
-            'timestamp': timestamp  # Use the timestamp passed to this function
+            'timestamp': timestamp,  # Use the timestamp passed to this function
+            'ip_address': ip_address,  # Add the IP address here
+            'target_user': target_user
         }
 
         # Publish the message to RabbitMQ
@@ -119,7 +120,7 @@ def register():
         users_collection.insert_one({"name": username, "password": hashed_password, "email": email})
 
         # Send registration message to RabbitMQ
-        send_message('user_created', username)
+        send_message('user_created', username, request.remote_addr)
 
         return redirect(url_for('login'))
 
@@ -140,13 +141,13 @@ def login():
             login_user(user)
 
             # Send login message to RabbitMQ
-            send_message('user_logged_in', username)
+            send_message('user_logged_in', username, request.remote_addr)
 
             # Redirect to index page after successful login
             return redirect(url_for('index'))
 
         # Send failed login attempt message to RabbitMQ
-        send_message('failed_login_attempt', username)
+        send_message('failed_login_attempt', username, request.remote_addr)
         return render_template('invalid_login.html')
 
     return render_template('login.html')
@@ -156,7 +157,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
-    send_message('user_logged_out', current_user.username)  # Send logout message
+    send_message('user_logged_out', current_user.username, request.remote_addr)  # Send logout message
     logout_user()
     return redirect(url_for('login'))
 
@@ -210,13 +211,19 @@ def manage_users():
 @login_required
 def delete_user(username):
     if current_user.username != 'admin':  # Check if the logged-in user is not 'admin'
+        send_message('user_deleted_failed_unauthorized', current_user.username, request.remote_addr,
+                     username)  # Send logout message
+
         return redirect(url_for('index'))  # Redirect non-admin users to home page
 
     if username != current_user.username:
         # Remove the user from the database
         users_collection.delete_one({"name": username})
+        send_message('user_deleted_success', current_user.username, request.remote_addr,username)  # Send logout message
         flash(f'User {username} has been deleted successfully.')
     else:
+        send_message('user_deleted_failed_self_deletion', current_user.username, request.remote_addr,
+                     username)  # Send logout message
         flash(f'You cannot delete the current logged-in user.')
 
     return redirect(url_for('manage_users'))
