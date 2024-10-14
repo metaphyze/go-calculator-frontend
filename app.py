@@ -9,7 +9,8 @@ import pika
 import threading
 import json
 from bson import ObjectId
-from datetime import datetime  # Import datetime for UTC timestamp
+from datetime import datetime
+from flask import flash
 
 app = Flask(__name__)
 
@@ -192,6 +193,27 @@ def submit_problem():
 
     # Return the response in JSON format
     return jsonify({'message': message})
+
+@app.route('/manage_users', methods=['GET'])
+@login_required
+def manage_users():
+    # Retrieve all users from the database
+    all_users = list(users_collection.find({}, {"name": 1, "email": 1}))  # Only fetch name and email fields
+
+    return render_template('manage_users.html', users=all_users, current_user=current_user.username)
+
+
+@app.route('/delete_user/<username>', methods=['POST'])
+@login_required
+def delete_user(username):
+    if username != current_user.username:
+        # Remove the user from the database
+        users_collection.delete_one({"name": username})
+        flash(f'User {username} has been deleted successfully.')
+    else:
+        flash(f'You cannot delete the current logged-in user.')
+
+    return redirect(url_for('manage_users'))
 
 
 if __name__ == '__main__':
