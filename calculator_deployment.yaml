@@ -25,6 +25,8 @@ spec:
           value: "http://calculation-service:9999"
         - name: USER_DB_HOST_AND_PORT
           value: "user-db-service:27017"
+        - name: LOG_DB_HOST_AND_PORT
+          value: "log-db-service:27017"
         - name: RABBITMQ_HOST
           value: "rabbitmq-service"
 ---
@@ -49,9 +51,9 @@ spec:
           image: metaphyze/rabbitMqToMongoDbLogger:latest
           env:
             - name: RABBITMQ_HOST
-              value: "rabbitmq-service"  # Replace with the actual RabbitMQ host or use a config map
+              value: "rabbitmq-service"
             - name: MONGODB_HOST
-              value: "user-db-service"  # Replace with the actual MongoDB host or use a config map
+              value: "log-db-service"
 ---
 #apiVersion: v1
 #kind: PersistentVolume
@@ -70,6 +72,18 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+# New PersistentVolumeClaim for logging database
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: log-mongo-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -128,6 +142,33 @@ spec:
       - name: mongo-storage
         persistentVolumeClaim:
           claimName: mongo-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-db-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-db-server
+  template:
+    metadata:
+      labels:
+        app: log-db-server
+    spec:
+      containers:
+      - name: log-db-server
+        image: mongo:8.0.1
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: log-mongo-storage
+          mountPath: /data/db
+      volumes:
+      - name: log-mongo-storage
+        persistentVolumeClaim:
+          claimName: log-mongo-pvc
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -192,6 +233,19 @@ metadata:
 spec:
   selector:
     app: user-db-server
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: log-db-service
+spec:
+  selector:
+    app: log-db-server
   ports:
     - protocol: TCP
       port: 27017

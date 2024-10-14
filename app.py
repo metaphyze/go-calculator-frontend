@@ -17,6 +17,7 @@ app = Flask(__name__)
 # Read configuration from environment variables
 calculation_server_url = os.environ.get('CALCULATION_URL', 'http://localhost:9999')
 user_db_host_and_port = os.environ.get('USER_DB_HOST_AND_PORT', 'localhost:27017')
+log_db_host_and_port = os.environ.get('LOG_DB_HOST_AND_PORT', 'localhost:27017')
 rabbitmq_host = os.environ.get('RABBITMQ_HOST', 'localhost')  # RabbitMQ host
 port = int(os.environ.get('PORT', 5000))
 
@@ -28,12 +29,11 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 # Initialize MongoDB connection
-client = MongoClient(f'mongodb://{user_db_host_and_port}/')
-db = client.users
-users_collection = db.users
+userClient = MongoClient(f'mongodb://{user_db_host_and_port}/')
+users_collection = userClient.users.users
 
-events_collection = client.user_events.events
-
+logClient = MongoClient(f'mongodb://{log_db_host_and_port}/')
+events_collection = logClient.user_events.events
 
 # User class for Flask-Login
 class User(UserMixin):
