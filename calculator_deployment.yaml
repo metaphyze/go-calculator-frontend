@@ -49,6 +49,7 @@ spec:
       containers:
         - name: rabbitmq-to-mongodb-logger
           image: metaphyze/rabbit-mq-to-mongodb-logger:latest
+          imagePullPolicy: Always
           env:
             - name: RABBITMQ_HOST
               value: "rabbitmq-service"
