@@ -23,7 +23,10 @@ app = Flask(__name__)
 calculation_server_url = os.environ.get('CALCULATION_URL', 'http://localhost:9999')
 user_db_host_and_port = os.environ.get('USER_DB_HOST_AND_PORT', 'localhost:27017')
 log_db_host_and_port = os.environ.get('LOG_DB_HOST_AND_PORT', 'localhost:27017')
-rabbitmq_host = os.environ.get('RABBITMQ_HOST', 'localhost')  # RabbitMQ host
+rabbitmq_host = os.environ.get('RABBITMQ_HOST', 'localhost')
+rabbitmq_user = os.environ.get('RABBITMQ_USER', 'guest')
+rabbitmq_password = os.environ.get('RABBITMQ_PASSWORD', 'guest')
+
 port = int(os.environ.get('PORT', 5000))
 
 app.secret_key = 'your_secret_key'  # Necessary for session management
@@ -70,7 +73,8 @@ def send_message(event_type, username, ip_address, target_user=''):
 def send_message_thread(event_type, username, timestamp, ip_address,target_user):
     try:
         # Establish connection with RabbitMQ
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
+        credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host, credentials=credentials))
         channel = connection.channel()
 
         # Declare a durable queue

@@ -29,6 +29,11 @@ spec:
           value: "log-db-service:27017"
         - name: RABBITMQ_HOST
           value: "rabbitmq-service"
+        - name: RABBITMQ_USER
+          value: "bugs"
+        - name: RABBITMQ_PASSWORD
+          value: "bunny"
+
 ---
 apiVersion: apps/v1
 kind: Deployment
