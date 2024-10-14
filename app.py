@@ -5,14 +5,18 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 import os
 import requests
+import pika
+import threading
+import json
 from bson import ObjectId
-
+from datetime import datetime  # Import datetime for UTC timestamp
 
 app = Flask(__name__)
 
 # Read configuration from environment variables
 calculation_server_url = os.environ.get('CALCULATION_URL', 'http://localhost:9999')
-user_db_host_and_port = os.environ.get('USER_DB_HOST_AND_PORT','localhost:27017')
+user_db_host_and_port = os.environ.get('USER_DB_HOST_AND_PORT', 'localhost:27017')
+rabbitmq_host = os.environ.get('RABBITMQ_HOST', 'localhost')  # RabbitMQ host
 port = int(os.environ.get('PORT', 5000))
 
 app.secret_key = 'your_secret_key'  # Necessary for session management
@@ -23,7 +27,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 # Initialize MongoDB connection
-client = MongoClient(f'mongodb://{user_db_host_and_port}/')  # Change as needed for your MongoDB instance
+client = MongoClient(f'mongodb://{user_db_host_and_port}/')
 #db = client['users']
 db = client.users
 users_collection = db.users
@@ -50,6 +54,40 @@ def load_user(user_id):
         return None
 
 
+# Function to send messages to RabbitMQ in a separate thread
+def send_message(event_type, username):
+    timestamp = datetime.utcnow().isoformat() + 'Z'
+    thread = threading.Thread(target=send_message_thread, args=(event_type, username, timestamp))
+    thread.start()
+
+def send_message_thread(event_type, username, timestamp):
+    try:
+        # Establish connection with RabbitMQ
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
+        channel = connection.channel()
+
+        # Declare a durable queue
+        channel.queue_declare(queue='user_events', durable=True)
+
+        # Prepare message payload
+        message = {
+            'username': username,
+            'event_type': event_type,
+            'timestamp': timestamp  # Use the timestamp passed to this function
+        }
+
+        # Publish the message to RabbitMQ
+        channel.basic_publish(exchange='',
+                              routing_key='user_events',
+                              body=json.dumps(message).encode('utf-8'),
+                              properties=pika.BasicProperties(
+                                  delivery_mode=2,  # Make message persistent
+                              ))
+
+        connection.close()
+    except Exception as e:
+        print(f"Failed to send message to RabbitMQ: {e}")
+
 # Serve the webpage
 @app.route('/', methods=['GET'])
 @login_required  # Require login to access the index page
@@ -57,7 +95,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/documentation', methods=['GET'])
-@login_required  # Require login to access the index page
+@login_required  # Require login to access the documentation
 def documentation():
     return render_template('documentation.html')
 
@@ -78,6 +116,10 @@ def register():
 
         # Insert new user into the database
         users_collection.insert_one({"name": username, "password": hashed_password, "email": email})
+
+        # Send registration message to RabbitMQ
+        send_message('user_created', username)
+
         return redirect(url_for('login'))
 
     return render_template('register.html')
@@ -96,8 +138,14 @@ def login():
             user = User(user_id=user_data['_id'], username=user_data['name'], email=user_data['email'])
             login_user(user)
 
+            # Send login message to RabbitMQ
+            send_message('user_logged_in', username)
+
             # Redirect to index page after successful login
             return redirect(url_for('index'))
+
+        # Send failed login attempt message to RabbitMQ
+        send_message('failed_login_attempt', username)
         return render_template('invalid_login.html')
 
     return render_template('login.html')
@@ -107,6 +155,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    send_message('user_logged_out', current_user.username)  # Send logout message
     logout_user()
     return redirect(url_for('login'))
 
@@ -124,7 +173,8 @@ def submit_problem():
     # Prepare the payload for the processing server
     payload = {
         'problem': problem,
-        'id': problem_id
+        'id': problem_id,
+        'username': current_user.username  # 'current_user' is provided by Flask-Login
     }
 
     # Forward the request to the processing server
