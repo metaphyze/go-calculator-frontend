@@ -15,6 +15,9 @@
     <div class="main-container">
         <div class="top-bar">
             <div class="user-name">Logged in as: <strong>{{ current_user.username }}</strong></div>
+             {% if current_user.username == 'admin' %}
+                <a href="{{ url_for('manage_users') }}">Manage Users</a>
+             {% endif %}
             <a href="{{ url_for('logout') }}">Logout</a>
         </div>
 

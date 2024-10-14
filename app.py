@@ -197,6 +197,9 @@ def submit_problem():
 @app.route('/manage_users', methods=['GET'])
 @login_required
 def manage_users():
+    if current_user.username != 'admin':  # Check if the logged-in user is not 'admin'
+        return redirect(url_for('index'))  # Redirect non-admin users to home page
+
     # Retrieve all users from the database
     all_users = list(users_collection.find({}, {"name": 1, "email": 1}))  # Only fetch name and email fields
 
@@ -206,6 +209,9 @@ def manage_users():
 @app.route('/delete_user/<username>', methods=['POST'])
 @login_required
 def delete_user(username):
+    if current_user.username != 'admin':  # Check if the logged-in user is not 'admin'
+        return redirect(url_for('index'))  # Redirect non-admin users to home page
+
     if username != current_user.username:
         # Remove the user from the database
         users_collection.delete_one({"name": username})
