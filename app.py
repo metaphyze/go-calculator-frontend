@@ -255,4 +255,5 @@ def show_user_logs(username):
 
 
 if __name__ == '__main__':
+    app.logger.info("Starting server")
     app.run(host='0.0.0.0', port=port, debug=True)
