@@ -232,7 +232,7 @@ def delete_user(username):
 
 @app.route('/show_logs', methods=['GET'])
 @login_required
-def show_logs():
+def show_all_logs():
     if current_user.username != 'admin':
         return redirect(url_for('index'))  # Redirect non-admin users to home page
 
@@ -240,6 +240,18 @@ def show_logs():
     events = list(events_collection.find({}))  # Adjust to fit your MongoDB setup
 
     return render_template('show_logs.html', events=events)
+
+@app.route('/show_logs/<username>', methods=['GET'])
+@login_required
+def show_user_logs(username):
+    if current_user.username != 'admin':
+        return redirect(url_for('index'))  # Redirect non-admin users to home page
+
+    # Retrieve all events for the specified username from the events collection
+    events = list(events_collection.find({"username": username}))  # Adjust to fit your MongoDB setup
+
+    return render_template('show_logs.html', events=events, username=username)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port, debug=True)

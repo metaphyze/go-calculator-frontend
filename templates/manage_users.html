@@ -20,6 +20,7 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Action</th>
+                    <th>Logs</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,13 +35,21 @@
                             </form>
                         {% endif %}
                     </td>
+                    <td>
+                        <form action="{{ url_for('show_user_logs', username=user.name) }}" method="get" style="display: inline;">
+                            <button type="submit">Show Logs</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
        <br/>
        <a href="{{ url_for('index') }}">Back</a>
-       <a href="{{ url_for('show_logs') }}">Show Logs</a> <!-- New Show Logs Link -->
+       <br/>
+       <form action="{{ url_for('show_all_logs') }}" method="get" style="display: inline;">
+            <button type="submit">Show All User Logs</button>
+       </form>
     </div>
 </body>
 </html>
