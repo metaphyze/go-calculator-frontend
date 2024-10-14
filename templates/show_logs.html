@@ -6,39 +6,121 @@
     <title>User Events Logs</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles_base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles_manage_users.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .banner {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin: 20px 0; /* Adjusted margin for spacing */
+            text-align: center; /* Center the heading */
+        }
+
+        table {
+            width: auto; /* Allow table width to fit its content */
+            border-collapse: collapse;
+            margin: 20px auto; /* Center the table */
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left; /* Align text to the left */
+        }
+
+        th {
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center the button container */
+            margin-top: 20px; /* Add some space above the buttons */
+        }
+
+        .button-container a {
+            padding: 10px 15px; /* Style the buttons */
+            background-color: #007BFF; /* Bootstrap primary color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button-container a:hover {
+            background-color: #0056b3; /* Darken on hover */
+        }
+    </style>
 </head>
 <body>
     <div class="banner">
         Scientific Calculator
     </div>
 
-    <div class="table-container">
-        <h1>User Events Logs</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Event Type</th>
-                    <th>Timestamp</th>
-                    <th>Timestamp (ms)</th>
-                    <th>Target User</th>
-                    <th>IP Address</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for event in events %}
-                <tr>
-                    <td>{{ event.username }}</td>
-                    <td>{{ event.event_type }}</td>
-                    <td>{{ event.timestamp }}</td>
-                    <td>{{ event.timestamp_ms }}</td>
-                    <td>{{ event.target_user }}</td>
-                    <td>{{ event.ip_address }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <br/>
+    <h1>User Events Logs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Event Type</th>
+                <th>Timestamp</th>
+                <th>Timestamp (ms)</th>
+                <th>Target User</th>
+                <th>IP Address</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            <tr>
+                <td>{{ event.username }}</td>
+                <td>{{ event.event_type }}</td>
+                <td>{{ event.timestamp }}</td>
+                <td>{{ event.timestamp_ms }}</td>
+                <td>{{ event.target_user }}</td>
+                <td>{{ event.ip_address }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="button-container">
         <a href="{{ url_for('manage_users') }}">Back</a>
     </div>
 </body>
