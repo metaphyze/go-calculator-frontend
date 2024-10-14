@@ -1,3 +1,5 @@
+import logging
+
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from pymongo import MongoClient
@@ -11,6 +13,9 @@ import json
 from bson import ObjectId
 from datetime import datetime
 from flask import flash
+
+# Configure logging before accessing app.logger
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
