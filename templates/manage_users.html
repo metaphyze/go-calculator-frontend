@@ -6,6 +6,28 @@
     <title>Manage Users</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles_base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles_manager_users.css') }}">
+    <style>
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* Position buttons on opposite sides */
+            margin-top: 20px; /* Add some space above the buttons */
+            margin-bottom: 20px; /* Add some space below the buttons */
+        }
+
+        .button-container button, .button-container a {
+            padding: 10px 15px; /* Style the buttons */
+            background-color: #007BFF; /* Bootstrap primary color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button-container button:hover, .button-container a:hover {
+            background-color: #0056b3; /* Darken on hover */
+        }
+    </style>
 </head>
 <body>
     <div class="banner">
@@ -14,6 +36,7 @@
 
     <div class="table-container">
         <h1>User Management</h1>
+
         <table>
             <thead>
                 <tr>
@@ -44,12 +67,13 @@
             {% endfor %}
             </tbody>
         </table>
-       <br/>
-       <a href="{{ url_for('index') }}">Back</a>
-       <br/>
-       <form action="{{ url_for('show_all_logs') }}" method="get" style="display: inline;">
-            <button type="submit">Show All User Logs</button>
-       </form>
+
+        <div class="button-container">
+            <a href="{{ url_for('index') }}">Back</a>
+            <form action="{{ url_for('show_all_logs') }}" method="get" style="display: inline;">
+                <button type="submit">Show All User Logs</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>
