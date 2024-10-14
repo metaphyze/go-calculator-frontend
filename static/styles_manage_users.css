@@ -67,3 +67,24 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Position buttons on opposite sides */
+    margin-top: 20px; /* Add some space above the buttons */
+    margin-bottom: 20px; /* Add some space below the buttons */
+}
+
+.button-container button, .button-container a {
+    padding: 10px 15px; /* Style the buttons */
+    background-color: #007BFF; /* Bootstrap primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button-container button:hover, .button-container a:hover {
+    background-color: #0056b3; /* Darken on hover */
+}
