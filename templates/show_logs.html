@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Events Logs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_manager_users.css') }}">
+</head>
+<body>
+    <div class="banner">
+        Scientific Calculator
+    </div>
+
+    <div class="table-container">
+        <h1>User Events Logs</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Event Type</th>
+                    <th>Timestamp</th>
+                    <th>Timestamp (ms)</th>
+                    <th>Target User</th>
+                    <th>IP Address</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for event in events %}
+                <tr>
+                    <td>{{ event.username }}</td>
+                    <td>{{ event.event_type }}</td>
+                    <td>{{ event.timestamp }}</td>
+                    <td>{{ event.timestamp_ms }}</td>
+                    <td>{{ event.target_user }}</td>
+                    <td>{{ event.ip_address }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br/>
+        <a href="{{ url_for('manage_users') }}">Back</a>
+    </div>
+</body>
+</html>

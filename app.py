@@ -32,6 +32,8 @@ client = MongoClient(f'mongodb://{user_db_host_and_port}/')
 db = client.users
 users_collection = db.users
 
+events_collection = client.user_events.events
+
 
 # User class for Flask-Login
 class User(UserMixin):
@@ -228,6 +230,16 @@ def delete_user(username):
 
     return redirect(url_for('manage_users'))
 
+@app.route('/show_logs', methods=['GET'])
+@login_required
+def show_logs():
+    if current_user.username != 'admin':
+        return redirect(url_for('index'))  # Redirect non-admin users to home page
+
+    # Retrieve all events from the events collection
+    events = list(events_collection.find({}))  # Adjust to fit your MongoDB setup
+
+    return render_template('show_logs.html', events=events)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port, debug=True)
