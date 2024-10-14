@@ -120,7 +120,14 @@ spec:
         env:
         - name: PORT
           value: "8080"
-
+        - name: RABBITMQ_HOST
+          value: "rabbitmq-service"
+        - name: RABBITMQ_USERNAME
+          value: "bugs"
+        - name: RABBITMQ_PASSWORD
+          value: "bunny"
+        - name: RABBITMQ_QUEUE
+          value: "calculation_events"
 ---
 apiVersion: apps/v1
 kind: Deployment
