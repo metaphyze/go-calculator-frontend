@@ -25,7 +25,33 @@ spec:
           value: "http://calculation-service:9999"
         - name: USER_DB_HOST_AND_PORT
           value: "user-db-service:27017"
-
+        - name: RABBITMQ_HOST
+          value: "rabbitmq-service"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-to-mongodb-logger
+  labels:
+    app: rabbitmq-to-mongodb-logger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq-to-mongodb-logger
+  template:
+    metadata:
+      labels:
+        app: rabbitmq-to-mongodb-logger
+    spec:
+      containers:
+        - name: rabbitmq-to-mongodb-logger
+          image: metaphyze/rabbitMqToMongoDbLogger:latest
+          env:
+            - name: RABBITMQ_HOST
+              value: "rabbitmq-service"  # Replace with the actual RabbitMQ host or use a config map
+            - name: MONGODB_HOST
+              value: "user-db-service"  # Replace with the actual MongoDB host or use a config map
 ---
 #apiVersion: v1
 #kind: PersistentVolume
