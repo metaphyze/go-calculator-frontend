@@ -89,6 +89,7 @@ def send_message_thread(event_type, username, timestamp, ip_address,target_user)
                               ))
 
         connection.close()
+        print(f"Sent RabbitMQ message: {message}")
     except Exception as e:
         print(f"Failed to send message to RabbitMQ: {e}")
 
