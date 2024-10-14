@@ -5,24 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Users</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles_base.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_manager_users.css') }}">
 </head>
 <body>
     <div class="banner">
         Scientific Calculator
     </div>
 
-    <h1>User Management</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
+    <div class="table-container">
+        <h1>User Management</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+             {% for user in users %}
                 <tr>
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
@@ -35,8 +36,10 @@
                     </td>
                 </tr>
             {% endfor %}
-        </tbody>
-    </table>
-    <a href="{{ url_for('index') }}">Go Back</a>
+            </tbody>
+        </table>
+       <br/>
+       <a href="{{ url_for('index') }}">Back</a>
+    </div>
 </body>
 </html>
