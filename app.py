@@ -213,7 +213,7 @@ def manage_users():
 @login_required
 def delete_user(username):
     if current_user.username != 'admin':  # Check if the logged-in user is not 'admin'
-        send_message('user_deleted_failed_unauthorized', current_user.username, request.remote_addr,
+        send_message('user_deletion_failed_unauthorized', current_user.username, request.remote_addr,
                      username)  # Send logout message
 
         return redirect(url_for('index'))  # Redirect non-admin users to home page
@@ -221,10 +221,10 @@ def delete_user(username):
     if username != current_user.username:
         # Remove the user from the database
         users_collection.delete_one({"name": username})
-        send_message('user_deleted_success', current_user.username, request.remote_addr,username)  # Send logout message
+        send_message('user_deleted', current_user.username, request.remote_addr,username)  # Send logout message
         flash(f'User {username} has been deleted successfully.')
     else:
-        send_message('user_deleted_failed_self_deletion', current_user.username, request.remote_addr,
+        send_message('user_deletion_failed_self_deletion', current_user.username, request.remote_addr,
                      username)  # Send logout message
         flash(f'You cannot delete the current logged-in user.')
 
@@ -237,7 +237,7 @@ def show_all_logs():
         return redirect(url_for('index'))  # Redirect non-admin users to home page
 
     # Retrieve all events from the events collection
-    events = list(events_collection.find({}))  # Adjust to fit your MongoDB setup
+    events = list(events_collection.find({}).sort("timestamp_ms", 1))  # 1 for ascending order
 
     return render_template('show_logs.html', events=events)
 
@@ -248,7 +248,7 @@ def show_user_logs(username):
         return redirect(url_for('index'))  # Redirect non-admin users to home page
 
     # Retrieve all events for the specified username from the events collection
-    events = list(events_collection.find({"username": username}))  # Adjust to fit your MongoDB setup
+    events = list(events_collection.find({"username": username}).sort("timestamp_ms", 1))  # 1 for ascending order
 
     return render_template('show_logs.html', events=events, username=username)
 

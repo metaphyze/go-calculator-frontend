@@ -52,7 +52,11 @@
         }
 
         tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #f9f9f9; /* Alternate row color */
+        }
+
+        tr:nth-child(odd) {
+            background-color: #ffffff; /* White for odd rows */
         }
 
         button {
@@ -98,10 +102,9 @@
     <table>
         <thead>
             <tr>
+                <th>Timestamp</th>
                 <th>Username</th>
                 <th>Event Type</th>
-                <th>Timestamp</th>
-                <th>Timestamp (ms)</th>
                 <th>Target User</th>
                 <th>IP Address</th>
             </tr>
@@ -109,10 +112,9 @@
         <tbody>
         {% for event in events %}
             <tr>
+                <td>{{ event.timestamp }}</td>
                 <td>{{ event.username }}</td>
                 <td>{{ event.event_type }}</td>
-                <td>{{ event.timestamp }}</td>
-                <td>{{ event.timestamp_ms }}</td>
                 <td>{{ event.target_user }}</td>
                 <td>{{ event.ip_address }}</td>
             </tr>
