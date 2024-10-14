@@ -17,11 +17,13 @@ spec:
         image: metaphyze/calculator-frontend:latest
         ports:
         - containerPort: 5000
-        env:  
+        env:
         - name: PORT
-          value: "5000"  
+          value: "5000"
         - name: CALCULATION_URL
-          value: "http://calculation-service:9999"  
+          value: "http://calculation-service:9999"
+        - name: USER_DB_HOST_AND_PORT
+          value: "user-db-service:27017"
 
 ---
 apiVersion: apps/v1
@@ -42,10 +44,32 @@ spec:
       - name: calculation-server
         image: metaphyze/go-calculator:latest
         ports:
-        - containerPort: 8080 
-        env:  
+        - containerPort: 8080
+        env:
         - name: PORT
-          value: "8080"  
+          value: "8080"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-db-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-db-server
+  template:
+    metadata:
+      labels:
+        app: user-db-server
+    spec:
+      containers:
+      - name: user-db-server
+        image: mongo:8.0.1
+        ports:
+        - containerPort: 27017
+
 ---
 apiVersion: v1
 kind: Service
@@ -59,7 +83,8 @@ spec:
       port: 9090
       targetPort: 5000
       nodePort: 30001
-  type: NodePort 
+  type: NodePort
+
 ---
 apiVersion: v1
 kind: Service
@@ -71,6 +96,19 @@ spec:
   ports:
     - protocol: TCP
       port: 9999
-      targetPort: 8080 
-  type: LoadBalancer 
+      targetPort: 8080
+  type: ClusterIP
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-db-service
+spec:
+  selector:
+    app: user-db-server
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP
