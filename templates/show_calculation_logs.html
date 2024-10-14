@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculation Events Logs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_manage_users.css') }}">
+</head>
+<body>
+    <div class="banner">
+        Scientific Calculator
+    </div>
+
+    <h1>Calculation Events Logs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>Username</th>
+                <th>Problem</th>
+                <th>ID</th>
+                <th>Server</th>
+                <th>Request Number</th>
+                <th>Duration (ms)</th>
+                <th>Success</th>
+                <th>Error</th>
+                <th>Answer</th>
+                <th>HTTP Return Code</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            <tr>
+                <td>{{ event.start_time }}</td>
+                <td>{{ event.username }}</td>
+                <td>{{ event.problem }}</td>
+                <td>{{ event.id }}</td>
+                <td>{{ event.server }}</td>
+                <td>{{ event.request_num }}</td>
+                <td>{{ event.duration_ms }}</td>
+                <td>{{ event.success }}</td>
+                <td>{{ event.error }}</td>
+                <td>{{ event.answer }}</td>
+                <td>{{ event.http_return_code }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="button-container">
+        <a href="{{ url_for('manage_users') }}">Back</a>
+    </div>
+</body>
+</html>

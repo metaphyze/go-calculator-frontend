@@ -21,7 +21,8 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Action</th>
-                    <th>Logs</th>
+                    <th>Access Logs</th>
+                    <th>Calculation Logs</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,6 +42,11 @@
                             <button type="submit">Show Logs</button>
                         </form>
                     </td>
+                    <td>
+                        <form action="{{ url_for('show_user_calculation_logs', username=user.name) }}" method="get" style="display: inline;">
+                            <button type="submit">Show Calculation Logs</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -50,6 +56,9 @@
             <a href="{{ url_for('index') }}">Back</a>
             <form action="{{ url_for('show_all_logs') }}" method="get" style="display: inline;">
                 <button type="submit">Show All User Logs</button>
+            </form>
+            <form action="{{ url_for('show_all_calculation_logs') }}" method="get" style="display: inline;">
+                <button type="submit">Show All Calculation Logs</button>
             </form>
         </div>
     </div>

@@ -42,6 +42,7 @@ users_collection = userClient.users.users
 
 logClient = MongoClient(f'mongodb://{log_db_host_and_port}/')
 events_collection = logClient.user_events.events
+calculation_events_collection = logClient.calculation_events.events
 
 # User class for Flask-Login
 class User(UserMixin):
@@ -261,6 +262,29 @@ def show_user_logs(username):
     events = list(events_collection.find({"username": username}).sort("timestamp_ms", 1))  # 1 for ascending order
 
     return render_template('show_logs.html', events=events, username=username)
+
+@app.route('/show_calculation_logs', methods=['GET'])
+@login_required
+def show_all_calculation_logs():
+    if current_user.username != 'admin':
+        return redirect(url_for('index'))  # Redirect non-admin users to home page
+
+    # Retrieve all calculation events from the calculation_events collection
+    calculation_events = list(calculation_events_collection.find({}).sort("start_time_ms", 1))  # 1 for ascending order
+
+    return render_template('show_calculation_logs.html', events=calculation_events)
+
+@app.route('/show_calculation_logs/<username>', methods=['GET'])
+@login_required
+def show_user_calculation_logs(username):
+    if current_user.username != 'admin':
+        return redirect(url_for('index'))  # Redirect non-admin users to home page
+
+    # Retrieve all calculation events for the specified username from the calculation_events collection
+    calculation_events = list(calculation_events_collection.find({"username": username}).sort("start_time_ms", 1))  # 1 for ascending order
+
+    return render_template('show_calculation_logs.html', events=calculation_events, username=username)
+
 
 
 if __name__ == '__main__':
